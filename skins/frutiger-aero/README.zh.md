@@ -74,6 +74,13 @@
 
 气泡的径向 alpha 剖面参考 [khang-nd/bubbles](https://github.com/khang-nd/bubbles)（MIT，Windows Bubbles 屏保的复刻版）。未复制任何资产，只使用了剖面数值。壁纸与全部皮肤代码均为原创。
 
-## 许可证
+## 许可与声明
 
 MIT，见 `LICENSE`。
+
+- **素材来源**：皮肤代码与全部美术资产均为原创。背景 `assets/aero-sky.webp` 由代码程序化
+  生成（天空渐变、阳光、白云、草地），气泡为纯 CSS 径向渐变——**不含任何第三方图像，
+  也不含任何人物形象**。
+- **参考**：气泡的径向 alpha 剖面参考 [khang-nd/bubbles](https://github.com/khang-nd/bubbles)
+  （MIT），只使用剖面数值，未复制任何素材。
+- **性质**：本皮肤为个人作品，与 DSH 官方及其关联方无关，未获其背书。
