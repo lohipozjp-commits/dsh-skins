@@ -6,7 +6,7 @@
      天空蓝 #58A2F2 / #1175F6 ・ 云白 #DDEEF8 ・ 草绿 #3C5B0F
    文字对比度：正文对面板合成底 >= 7:1，次要文字 >= 4.5:1（WCAG AA）
    ------------------------------------------------------------
-   改配色只需改这个文件里的 token，不用碰结构性代码。
+   改配色只需改这个文件里的变量，不用碰结构性代码。
    ============================================================ */
 
 /* ---------- 浅色：正午晴空 · 白亮通透 ---------- */
@@ -15,15 +15,15 @@
   background-color: #CDE8FA;
 
   /* 气泡动效开关（零消耗模式）：
-     running = 气泡上浮动画运行
-     paused  = 气泡冻结、合成器零每帧工作（GPU 占用降到接近空闲）
+     运行（running）= 气泡上浮动画运行
+     冻结（paused） = 气泡冻结、合成器零每帧工作（显卡占用降到接近空闲）
      想冻结就把下面这个值改为 paused，然后刷新页面。 */
   --aero-bubble-motion: running;
 
-  /* 面板：冰蓝玻璃。alpha 用【纯乘性】写法：
+  /* 面板：冰蓝玻璃。透明度用【纯乘性】写法：
      没有背景图时接近全透，有背景图时按用户设定的背景不透明度线性加权
-     （skin-center 会把 backgroundOpacity 计入 --dsw-skin-scrim）。
-       scrim 0.85 → alpha 约 0.19（半透玻璃） ｜ scrim 0 → 接近全透
+     （皮肤中心会把背景不透明度计入 --dsw-skin-scrim）。
+       遮蔽 0.85 → 透明度约 0.19（半透玻璃） ｜ 遮蔽 0 → 接近全透
      调参入口优先用滑杆：设置 → 皮肤中心 → 背景遮蔽（0-100%），
      它就是 --dsw-skin-scrim，直接乘以下面的系数，实时生效且持久化。
      注意：该滑杆同时控制壁纸上的纱，调低会让壁纸更鲜亮。 */
@@ -246,7 +246,7 @@ body[data-ds-dark-theme] {
   color-scheme: dark;
 }
 
-/* ---------- AionUI 组件 token ---------- */
+/* ---------- AionUI 组件变量 ---------- */
 :root {
   --aion-bg-base: #ffffff94;
   --aion-bg-1: #F4FBFF80;
@@ -310,7 +310,7 @@ body[data-ds-dark-theme] {
 /* ---------- 水光：高光描边与外发光（Frutiger Aero 的"棱"）---------- */
 [data-dsh-part="dialog"] {
   /* 窗口级巨型层 [data-dsh-part="dialog"] 刻意不使用 backdrop-filter：
-     对它做整屏高斯模糊约 +22% GPU，是这套皮肤里唯一昂贵的写法。
+     对它做整屏高斯模糊约 +22% 显卡占用，是这套皮肤里唯一昂贵的写法。
      区域磨砂改由 patches.css 挂到具体结构类名上，代价低于 0.3%。 */
   border-color: #ffffffb3;
   box-shadow:
@@ -379,13 +379,13 @@ body[data-ds-dark-theme] :focus-visible {
   outline-color: var(--dsw-alias-state-business-primary);
 }
 
-/* ---------- 窄窗浮层侧栏（viewport < 1024px）----------
+/* ---------- 窄窗浮层侧栏（视口宽度 < 1024px）----------
    窄窗下侧栏收成窄轨；手动展开时它作为浮层叠在被压缩的主区之上。
    官方默认的 --dsw-specific-sidebar-fill 是不透明静态色，正是为了浮层态可读：
    半透明填充会让背后内容透出来，两层文字互相叠印。 */
 @media (max-width: 1023px) {
   /* 只给侧栏列单独加底色，不要覆盖 --dsw-specific-sidebar-fill：
-     该 token 同时是整个 frame 的底色
+     该变量同时是整个窗口框架的底色
      （[data-windows-titlebar] .BynINW_frame { background: var(--dsw-specific-sidebar-fill) }），
      在断点内改它会把壁纸一起挡掉，整个窗口变成一片灰。 */
   [class*="sidebarCol"] {
@@ -404,7 +404,7 @@ body[data-ds-dark-theme] :focus-visible {
   /* 浮层遮罩减半：窄窗下侧栏浮层会用 --dsw-alias-bg-mask-1 压暗主区，
      官方 24% 与接近纯白的侧栏并置时对比偏硬；此处降到 12%（暗色 50%→32%），
      保留"内容退后"的层次而不显得发灰。
-     注意：该 token 也用于窄窗内的其它弹层遮罩，会一并变淡。 */
+     注意：该变量也用于窄窗内的其它弹层遮罩，会一并变淡。 */
   :root {
     --dsw-alias-bg-mask-1: #0B25401f;
   }

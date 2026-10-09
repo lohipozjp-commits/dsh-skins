@@ -7,13 +7,13 @@
 
 /* ---------- 气泡装饰层 ----------
    6 枚气泡 / 500px 平铺，用 transform 在合成器线程上浮（只平移纹理，不触发重绘）。
-   元素底部刻意延长一个 tile 高度：平移最多一个 tile，
+   元素底部刻意延长一个瓦片高度：平移最多一个瓦片，
    任意时刻视口都被平铺图案覆盖（t<=500 时元素覆盖 [-t, V+500-t] ⊇ [0, V]），
    因此不会出现"气泡带子扫过屏幕"的空档。 */
 [data-dsh-skin-layer="background"]::after {
   content: "";
   position: absolute;
-  inset: 0 0 -500px 0;   /* 底部多出 500px = 一个 tile，专为 transform 平移留的余量 */
+  inset: 0 0 -500px 0;   /* 底部多出 500px = 一个瓦片，专为 transform 平移留的余量 */
   pointer-events: none;
 
   background-image:
@@ -45,13 +45,13 @@
   background-size: 500px 500px;
   background-repeat: repeat;
 
-  /* transform 动画：合成器线程，GPU 只平移纹理，不触发重绘。
-     20s 平移 500px = 25px/s 上升；位移 = tile 整数倍，循环无缝。
+  /* transform 动画：合成器线程，显卡只平移纹理，不触发重绘。
+     20s 平移 500px = 25px/s 上升；位移 = 瓦片整数倍，循环无缝。
      底部已延长 500px，整个周期视口全覆盖，不会再有"带子"现象。 */
   animation: aero-bubble-rise 20s linear infinite;
   /* 零消耗开关：animation-play-state 由 --aero-bubble-motion 控制。
-     running = 气泡上浮（有 GPU 合成开销）
-     paused  = 气泡冻结在当前位置，合成器零每帧工作，面板模糊也只需
+     运行（running）= 气泡上浮（有显卡合成开销）
+     冻结（paused） = 气泡冻结在当前位置，合成器零每帧工作，面板模糊也只需
                采样一次静态背景 —— 观感不变只是停下来，几乎零消耗。
      切换方法：skin.css 里把 --aero-bubble-motion 改为 paused 后刷新。 */
   animation-play-state: var(--aero-bubble-motion, running);
@@ -80,7 +80,7 @@ body[data-ds-dark-theme] [data-dsh-skin-layer="background"]::after,
 
 /* ---------- 玻璃水光：磨砂 + 高光描边 + 外发光 ----------
    ★选择器来源★
-   四个壳层区域用 CSS Modules 真实类名定位：
+   用 CSS 模块的真实类名定位四个壳层区域：
      .{hash}_sidebarCol     左侧工作区列
      .{hash}_centerCol      主内容区
      .{hash}_rightbarCol    右侧工作区列（展开时才存在）
@@ -89,10 +89,10 @@ body[data-ds-dark-theme] [data-dsh-skin-layer="background"]::after,
    哈希前缀随 DSH 版本变化，故一律用 [class*=] 通配匹配。
 
    ★磨砂统筹★ 割裂感来自"相邻区域模糊度不同"，所以把最大相邻差值压到最小：
-     顶栏 2px │ 侧栏 0（清玻璃）│ 主区 2px │ 右侧栏 3px │ tooltip 4px
+     顶栏 2px │ 侧栏 0（清玻璃）│ 主区 2px │ 右侧栏 3px │ 提示气泡 4px
      最大差值 3px，三条接缝都看不出断差。
-   这四处磨砂叠在全屏动态气泡之上时，GPU 3D 占用仍低于 0.3%（Intel Iris Xe）。
-   窗口级巨型层 [data-dsh-part="dialog"] 刻意不加模糊：那里约 +22% GPU。
+   这四处磨砂叠在全屏动态气泡之上时，显卡 3D 占用仍低于 0.3%（Intel Iris Xe）。
+   窗口级巨型层 [data-dsh-part="dialog"] 刻意不加模糊：那里约 +22% 显卡占用。
    兜底：系统开启"减少透明效果"时本段的磨砂自动失效。 */
 @media (prefers-reduced-transparency: no-preference) {
   [class*="sidebarCol"] {
@@ -145,7 +145,7 @@ body[data-ds-dark-theme] [data-dsh-skin-layer="background"]::after,
 [class*="centerCol"],
 [class*="rightbarCol"] {
   /* 极淡接缝：6% 柔光，只"暗示"分区存在，不形成亮线。
-     想要更强的边界感就把 alpha 往上调；觉得又成亮线了就往下调或改用暗色接缝。 */
+     想要更强的边界感就把透明度往上调；觉得又成亮线了就往下调或改用暗色接缝。 */
   box-shadow: inset 4px 0 7px -4px #ffffff0f;
 }
 
